@@ -12,7 +12,7 @@ Everything a new app needs to run next to the game on the shared base ([ADR 0040
 1. The app's repository needs a `Dockerfile` at its root. The container listens on port 8080 (change `TARGET_PORT` in `deploy.yml` if not) and should answer `/health/ready` if Portfolio-SLC is to wake it.
 2. Sign in with `az login` and `gh auth login`, then from this repository run:
    ```powershell
-   .\templates\new-app\setup-app.ps1 -SubscriptionId <game subscription id> -AppName my-app -GitHubRepo scox115/my-app -Database
+   .\templates\new-app\setup-app.ps1 -SubscriptionId <game subscription id> -AppName my-app -GitHubRepo papa-bear-games/my-app -Database
    ```
    Leave out `-Database` if the app has no database.
 3. Copy `deploy.yml` into the app repository and push to `main`. The run's summary shows the app's address.

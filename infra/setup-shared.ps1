@@ -31,7 +31,7 @@ param(
     [string] $ResourceGroup = 'rg-portfolio-shared',
     [string] $Location = 'centralus',
     [string] $SqlAdminGroupName = 'portfolio-sql-admins',
-    [string] $GitHubRepo = 'scox115/gameappportfolio',
+    [string] $GitHubRepo = 'papa-bear-games/gameappportfolio',
     [string] $DeployAppName = 'card-arena-github-deploy',
     [string[]] $ApiIdentities = @('rg-card-arena/id-card-arena-api', 'rg-card-arena-staging/id-card-arena-api-staging')
 )
