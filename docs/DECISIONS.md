@@ -3,6 +3,8 @@
 Newest first. Design decisions about the code are ADRs in `docs/adr/`; this file holds decisions
 about the repo and the project.
 
+- 2026-10-13: Production's database stays on paid Basic (about $5 a month), which Scottie set on
+  2026-10-10, rather than moving back to the free serverless offer (Scottie).
 - 2026-10-13: The deploy no longer forces the free offer on a shared database someone moved to a
   paid tier; it leaves it as it is (Claude, so production deploys work again).
 

@@ -12,8 +12,8 @@
   database step: "Cannot update paid database to free database". Production's `cardarena` was
   switched by hand from the free serverless offer to paid Basic (5 DTU, 2 GB) on 2026-10-10 from
   Scottie's account, while the template still asked for the free offer. The deploy now leaves a
-  paid shared database as it is (`free=false` from `infra/shared-base.sh`). Whether to keep Basic
-  (about $5 a month, no cold starts) or move back to a free database is Scottie's call.
+  paid shared database as it is (`free=false` from `infra/shared-base.sh`). Scottie chose to keep
+  Basic (about $5 a month, no cold starts). Staging stays on the free offer.
 - 2026-10-10: Feature work done to date: boss fights, live duels, ranked seasons, friends,
   spectating, replays, guest play, two-factor sign-in (required for admins), recovery email,
   moderation, staging and previews, shared portfolio base (ADR 0040). See the ADR index.
