@@ -8,6 +8,8 @@
 #   location=centralus          its region
 #   database=cardarena          this copy's database on that server
 #   ready=true                  the database is there, so the game runs on the shared base
+#   free=true                   the database is on the free offer, so the deploy keeps it there; false
+#                               when someone moved it to a paid tier, which the deploy then leaves alone
 #
 #   shared-base.sh <shared resource group> <staging|production>
 #
@@ -35,4 +37,11 @@ found=$(az sql db list --resource-group "$group" --server "$server" \
 echo "group=$group"
 jq -r '"environment=\(.environmentName.value)", "server=\(.sqlServerName.value)", "location=\(.location.value)"' <<< "$outputs"
 echo "database=$database"
-if [ "$found" = 1 ]; then echo "ready=true"; else echo "ready=false"; fi
+if [ "$found" = 1 ]; then
+  echo "ready=true"
+  free=$(az sql db show --resource-group "$group" --server "$server" --name "$database" \
+    --query useFreeLimit --output tsv)
+  if [ "$free" = true ]; then echo "free=true"; else echo "free=false"; fi
+else
+  echo "ready=false"
+fi

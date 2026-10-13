@@ -156,6 +156,7 @@ jobs:
             ${{ secrets.GHCR_READ_TOKEN }}
             ${{ inputs.environment }}
             ${{ steps.shared.outputs.ready == 'true' && steps.shared.outputs.server || '' }}
+            ${{ steps.shared.outputs.free }}
 
       - name: Deploy infrastructure and the API
         if: steps.plan.outputs.full == 'true'
@@ -165,7 +166,8 @@ jobs:
           shared=()
           if [ "$SHARED_READY" = "true" ]; then
             shared=(sharedResourceGroup="$SHARED_GROUP" sharedEnvironmentName="$SHARED_ENVIRONMENT"
-                    sharedSqlServerName="$SHARED_SERVER" sharedDatabaseName="$SHARED_DATABASE" sharedLocation="$SHARED_LOCATION")
+                    sharedSqlServerName="$SHARED_SERVER" sharedDatabaseName="$SHARED_DATABASE" sharedLocation="$SHARED_LOCATION"
+                    sharedDatabaseFree="${SHARED_FREE:-true}")
           fi
           az deployment group create \
             --name "card-arena-${GITHUB_RUN_NUMBER}-${{ steps.plan.outputs.fingerprint }}" \
@@ -198,6 +200,7 @@ jobs:
           SHARED_ENVIRONMENT: ${{ steps.shared.outputs.environment }}
           SHARED_SERVER: ${{ steps.shared.outputs.server }}
           SHARED_DATABASE: ${{ steps.shared.outputs.database }}
+          SHARED_FREE: ${{ steps.shared.outputs.free }}
           SHARED_LOCATION: ${{ steps.shared.outputs.location }}
           JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
           RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}

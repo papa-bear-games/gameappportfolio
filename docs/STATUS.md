@@ -8,6 +8,12 @@
   packages were turned on for the org and the `card-arena-api` package was made public, so
   Azure can pull the image without a token. The setup scripts now repoint an existing credential
   at a new repo name instead of failing with "already exists".
+- 2026-10-13: The first deploy after the move reached staging but production stopped at the
+  database step: "Cannot update paid database to free database". Production's `cardarena` was
+  switched by hand from the free serverless offer to paid Basic (5 DTU, 2 GB) on 2026-10-10 from
+  Scottie's account, while the template still asked for the free offer. The deploy now leaves a
+  paid shared database as it is (`free=false` from `infra/shared-base.sh`). Scottie chose to keep
+  Basic (about $5 a month, no cold starts). Staging stays on the free offer.
 - 2026-10-10: Feature work done to date: boss fights, live duels, ranked seasons, friends,
   spectating, replays, guest play, two-factor sign-in (required for admins), recovery email,
   moderation, staging and previews, shared portfolio base (ADR 0040). See the ADR index.
