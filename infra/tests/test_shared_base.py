@@ -11,8 +11,8 @@ from pathlib import Path
 
 SCRIPT = Path(__file__).resolve().parents[1] / "shared-base.sh"
 
-# Answers the two az commands the script uses: the shared deployment's outputs (absent when the
-# shared base isn't deployed) and the databases on the shared server.
+# Answers the az commands the script uses: the shared deployment's outputs (absent when the shared
+# base isn't deployed), the databases on the shared server and whether one is on the free offer.
 FAKE_AZ = r'''#!/usr/bin/env python3
 import json, os, sys
 state = json.load(open(os.environ["FAKE_STATE"]))
@@ -28,6 +28,9 @@ elif args[:3] == ["sql", "db", "list"]:
     query = opt("--query")
     name = query.split("'")[1]
     print(sum(1 for database in state["databases"] if database == name))
+elif args[:3] == ["sql", "db", "show"]:
+    assert opt("--query") == "useFreeLimit"
+    print("false" if opt("--name") in state["paid"] else "true")
 else:
     sys.exit("fake az: unexpected command " + " ".join(args))
 '''
@@ -40,13 +43,13 @@ OUTPUTS = {
 
 
 class SharedBaseTests(unittest.TestCase):
-    def run_script(self, *args, outputs=OUTPUTS, databases=()):
+    def run_script(self, *args, outputs=OUTPUTS, databases=(), paid=()):
         folder = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: subprocess.run(["rm", "-rf", str(folder)]))
         az = folder / "az"
         az.write_text(FAKE_AZ)
         az.chmod(0o755)
-        (folder / "state.json").write_text(json.dumps({"outputs": outputs, "databases": list(databases)}))
+        (folder / "state.json").write_text(json.dumps({"outputs": outputs, "databases": list(databases), "paid": list(paid)}))
         env = dict(os.environ, PATH=f"{folder}:{os.environ['PATH']}", FAKE_STATE=str(folder / "state.json"))
         return subprocess.run(["bash", str(SCRIPT), *args], capture_output=True, text=True, env=env)
 
@@ -61,7 +64,14 @@ class SharedBaseTests(unittest.TestCase):
             "location=centralus",
             "database=cardarena",
             "ready=true",
+            "free=true",
         ], result.stdout.splitlines())
+
+    def test_says_when_the_database_was_moved_to_a_paid_tier(self):
+        result = self.run_script("rg-portfolio-shared", "production", databases=["cardarena"], paid=["cardarena"])
+
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("free=false", result.stdout.splitlines())
 
     def test_staging_has_a_database_of_its_own(self):
         result = self.run_script("rg-portfolio-shared", "staging", databases=["cardarena"])
@@ -74,6 +84,7 @@ class SharedBaseTests(unittest.TestCase):
 
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn("ready=false", result.stdout.splitlines())
+        self.assertNotIn("free=true", result.stdout)
 
     def test_says_what_to_do_when_the_shared_base_isnt_deployed(self):
         result = self.run_script("rg-portfolio-shared", "production", outputs=None)

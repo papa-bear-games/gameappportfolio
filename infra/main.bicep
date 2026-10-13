@@ -105,6 +105,9 @@ param sharedDatabaseName string = ''
 @description('The shared base\'s region (its "location" output), where the API and its database run.')
 param sharedLocation string = ''
 
+@description('Whether the game\'s database on the shared server is on the free offer. False when it was moved to a paid tier by hand: Azure can\'t switch a paid database back to free, so the template then leaves it as it is.')
+param sharedDatabaseFree bool = true
+
 var suffix = uniqueString(resourceGroup().id)
 var tags = { app: 'kings-of-the-card-arena', environment: environmentName }
 var isStaging = environmentName == 'staging'
@@ -347,7 +350,7 @@ resource sharedSqlServer 'Microsoft.Sql/servers@2023-08-01-preview' existing = i
   scope: sharedScope
 }
 
-module sharedDatabase 'modules/database.bicep' = if (useSharedBase) {
+module sharedDatabase 'modules/database.bicep' = if (useSharedBase && sharedDatabaseFree) {
   name: 'card-arena-database-${environmentName}'
   scope: sharedScope
   params: {
@@ -356,6 +359,11 @@ module sharedDatabase 'modules/database.bicep' = if (useSharedBase) {
     location: sharedLocation
     tags: tags
   }
+}
+
+resource paidSharedDatabase 'Microsoft.Sql/servers/databases@2023-08-01-preview' existing = if (useSharedBase && !sharedDatabaseFree) {
+  parent: sharedSqlServer
+  name: databaseName
 }
 
 resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = if (!useSharedBase) {
@@ -413,7 +421,7 @@ resource database 'Microsoft.Sql/servers/databases@2023-08-01-preview' = if (!us
 }
 
 var sqlServerAddress = useSharedBase ? sharedSqlServer!.properties.fullyQualifiedDomainName : sqlServer!.properties.fullyQualifiedDomainName
-var databaseId = useSharedBase ? sharedDatabase!.outputs.id : database!.id
+var databaseId = !useSharedBase ? database!.id : sharedDatabaseFree ? sharedDatabase!.outputs.id : paidSharedDatabase!.id
 
 // --- Client ---
 
