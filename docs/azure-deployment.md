@@ -61,8 +61,8 @@ You need an Azure subscription, the [Azure CLI](https://learn.microsoft.com/cli/
 
    It's safe to run again. If Windows blocks the script, run `Set-ExecutionPolicy -Scope Process Bypass` first.
 
-3. Let Azure pull the API image. The image goes to GitHub Container Registry as `ghcr.io/scox115/card-arena-api`. Pick one:
-   - **Recommended:** after the first deploy, open the package on GitHub (your profile > Packages > card-arena-api > Package settings) and set its visibility to **Public**. Public images are free to download. The image holds only the compiled API and no secrets.
+3. Let Azure pull the API image. The image goes to GitHub Container Registry as `ghcr.io/papa-bear-games/card-arena-api`. Pick one:
+   - **Recommended:** after the first deploy, open the package on GitHub (the papa-bear-games organization > Packages > card-arena-api > Package settings) and set its visibility to **Public**. Public images are free to download. The image holds only the compiled API and no secrets.
    - Keep the image private: create a classic GitHub token with just the `read:packages` scope and save it as the `GHCR_READ_TOKEN` repository secret. Private downloads count against GitHub's 1 GB a month free transfer, and a cold start can download the image again.
 
 4. Open **Actions > Deploy to Azure > Run workflow**. The run summary links to the live game.

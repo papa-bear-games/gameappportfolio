@@ -22,7 +22,7 @@
 
 .EXAMPLE
     .\templates\new-app\setup-app.ps1 -SubscriptionId 00000000-0000-0000-0000-000000000000 `
-        -AppName budget-tracker -GitHubRepo scox115/budget-tracker -Database
+        -AppName budget-tracker -GitHubRepo papa-bear-games/budget-tracker -Database
 #>
 [CmdletBinding()]
 param(
