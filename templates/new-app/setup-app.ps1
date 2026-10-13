@@ -137,6 +137,7 @@ $credentials = [ordered]@{
     'github-production-ids' = "repo:${owner}@$($ids[0])/${repo}@$($ids[1]):environment:production"
 }
 $subjects = @(Invoke-Az ad app federated-credential list --id $appId --query '[].subject' --output tsv)
+$names = @(Invoke-Az ad app federated-credential list --id $appId --query '[].name' --output tsv)
 foreach ($name in $credentials.Keys) {
     if ($subjects -contains $credentials[$name]) { continue }
     Write-Host "  trusting $($credentials[$name])"
@@ -147,7 +148,14 @@ foreach ($name in $credentials.Keys) {
         subject   = $credentials[$name]
         audiences = @('api://AzureADTokenExchange')
     } | ConvertTo-Json | Set-Content -Path $credentialFile -Encoding ASCII
-    Invoke-Az ad app federated-credential create --id $appId --parameters "@$credentialFile" | Out-Null
+    # After a rename or transfer the credential already exists under the old repository name,
+    # so point it at the new name instead of creating a second one with the same name.
+    if ($names -contains $name) {
+        Invoke-Az ad app federated-credential update --id $appId --federated-credential-id $name --parameters "@$credentialFile" | Out-Null
+    }
+    else {
+        Invoke-Az ad app federated-credential create --id $appId --parameters "@$credentialFile" | Out-Null
+    }
     Remove-Item $credentialFile
 }
 
