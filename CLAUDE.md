@@ -7,6 +7,9 @@ purpose so hiring managers can read the code (moved from
 `scox115/gameappportfolio` on 2026-10-13 and renamed from `gameappportfolio` on 2026-10-15; old
 links redirect).
 
+The web game is free and opens only from scottcoxdev.com (ADR 0041). The paid Android version is a
+separate project in `papa-bear-games/kings-of-the-card-arena-android`; changes for it don't go here.
+
 Read this first, then `docs/STATUS.md` (where it stands and what waits on Scottie) and
 `docs/DECISIONS.md` (decisions about the repo and project). Design decisions about the code are
 Architecture Decision Records in `docs/adr/`; `ReadMe.md` and `docs/case-study.md` are the public
