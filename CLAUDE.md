@@ -2,7 +2,7 @@
 
 Scottie's portfolio project: a turn-based card battler in the browser, built like a production
 service. Live at https://play.scottcoxdev.com and linked from https://scottcoxdev.com
-(papa-bear-games/portfolio-app-slc). Repo: https://github.com/papa-bear-games/kings-of-the-card-arena, public on
+(papa-bear-games/scottcoxdev-site). Repo: https://github.com/papa-bear-games/kings-of-the-card-arena, public on
 purpose so hiring managers can read the code (moved from
 `scox115/gameappportfolio` on 2026-10-13 and renamed from `gameappportfolio` on 2026-10-15; old
 links redirect).
