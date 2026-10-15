@@ -1,7 +1,7 @@
 # ⚔️ Kings of the Card Arena
 
-[![CI](https://github.com/papa-bear-games/gameappportfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/papa-bear-games/gameappportfolio/actions/workflows/ci.yml)
-[![Deploy](https://github.com/papa-bear-games/gameappportfolio/actions/workflows/deploy.yml/badge.svg)](https://github.com/papa-bear-games/gameappportfolio/actions/workflows/deploy.yml)
+[![CI](https://github.com/papa-bear-games/kings-of-the-card-arena/actions/workflows/ci.yml/badge.svg)](https://github.com/papa-bear-games/kings-of-the-card-arena/actions/workflows/ci.yml)
+[![Deploy](https://github.com/papa-bear-games/kings-of-the-card-arena/actions/workflows/deploy.yml/badge.svg)](https://github.com/papa-bear-games/kings-of-the-card-arena/actions/workflows/deploy.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)
 ![Azure](https://img.shields.io/badge/Azure-Container%20Apps%20%7C%20SQL%20%7C%20Static%20Web%20Apps-0078D4)
 

@@ -3,6 +3,9 @@
 Newest first. Design decisions about the code are ADRs in `docs/adr/`; this file holds decisions
 about the repo and the project.
 
+- 2026-10-15: Renamed the repo to `kings-of-the-card-arena`, after the game (Scottie).
+- 2026-10-15: The repo stays public, the only public Papa Bear game repo, because it is a
+  portfolio piece and scottcoxdev.com links to its code (Scottie).
 - 2026-10-13: Production's database stays on paid Basic (about $5 a month), which Scottie set on
   2026-10-10, rather than moving back to the free serverless offer (Scottie).
 - 2026-10-13: The deploy no longer forces the free offer on a shared database someone moved to a
